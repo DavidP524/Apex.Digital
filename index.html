@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Apex Digital | Premium Web Design for Local Businesses</title>
+  <meta name="description" content="Custom websites engineered to grow your business. We design and build digital experiences that turn visitors into booked appointments and measurable revenue.">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind (CDN for dev — swap for build output in production) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function() {
+      var saved = localStorage.getItem('apex-dark-mode');
+      if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+
+  <!-- Project Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ================================================================
+       NAVIGATION
+       ================================================================ -->
+  <nav class="site-nav fixed top-0 left-0 w-full z-50 px-6 md:px-12 lg:px-20 py-5" role="navigation" aria-label="Main navigation">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" id="logoLink" class="flex items-center gap-2 no-underline" style="color: var(--color-text);">
+        <span class="footer-logo" style="font-family: var(--font-display); font-weight: 800; font-size: 1.35rem; letter-spacing: -0.02em;">
+          APEX<span class="logo-dot" style="color: var(--color-accent);">.</span>DIGITAL
+        </span>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="hidden md:flex items-center gap-10">
+        <a href="#services" class="nav-link text-sm font-medium no-underline" data-section="services" style="font-family: var(--font-body);">Services</a>
+        <a href="#process" class="nav-link text-sm font-medium no-underline" data-section="process" style="font-family: var(--font-body);">Process</a>
+        <a href="#work" class="nav-link text-sm font-medium no-underline" data-section="work" style="font-family: var(--font-body);">Work</a>
+        <a href="#about" class="nav-link text-sm font-medium no-underline" data-section="about" style="font-family: var(--font-body);">About</a>
+        <button id="darkModeToggle" class="dark-mode-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <a href="#contact" class="btn-primary text-sm no-underline" style="letter-spacing: 0.02em; color: #FFFFFF;">Get In Touch</a>
+      </div>
+
+      <!-- Hamburger -->
+      <div class="md:hidden flex items-center gap-3">
+        <button id="darkModeToggleMobile" class="dark-mode-toggle" aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+        <button id="menuToggle" class="flex flex-col gap-1.5 bg-transparent border-none cursor-pointer p-2" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span class="block w-6 h-0.5 transition-all" style="background: var(--color-text);"></span>
+          <span class="block w-6 h-0.5 transition-all" style="background: var(--color-text);"></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ================================================================
+       MOBILE MENU (accessible overlay with focus trap)
+       ================================================================ -->
+  <div id="mobileMenu" class="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation" aria-hidden="true">
+    <button id="menuClose" class="absolute top-6 right-6 bg-transparent border-none cursor-pointer p-2" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" style="color: var(--color-text);">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#work">Work</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+
+  <!-- ================================================================
+       HERO
+       ================================================================ -->
+  <section class="relative min-h-screen flex flex-col items-center justify-center px-6 md:px-12 lg:px-20 overflow-hidden" aria-label="Hero">
+    <div class="relative z-10 text-center max-w-5xl mx-auto">
+      <p class="hero-eyebrow text-sm md:text-base font-medium tracking-[0.2em] uppercase mb-8" style="color: var(--color-accent); font-family: var(--font-body);">
+        Strategic Web Design
+      </p>
+      <h1 style="font-family: var(--font-display); line-height: 0.95; letter-spacing: -0.03em;" class="text-5xl md:text-7xl lg:text-[8.5rem] font-800">
+        <span class="hero-word-1 block" style="font-weight: 800;">Websites Engineered</span>
+        <span class="hero-word-2 block" style="font-weight: 800; color: var(--color-accent);">to Grow Your Business.</span>
+      </h1>
+      <p class="hero-sub text-base md:text-lg lg:text-xl mt-8 max-w-2xl mx-auto leading-relaxed" style="color: var(--color-muted); font-family: var(--font-body); font-weight: 400;">
+        We design and build custom digital experiences that turn visitors into booked appointments and measurable revenue. No templates, just precision built sites designed around your business.
+      </p>
+      <div class="hero-ctas flex flex-col sm:flex-row gap-4 justify-center mt-10">
+        <a href="#contact" class="btn-primary no-underline text-center">Get My Free Custom Mockup</a>
+        <a href="#work" class="btn-secondary no-underline text-center">See Our Work</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3" aria-hidden="true">
+      <span class="text-xs tracking-[0.15em] uppercase" style="color: var(--color-muted); font-family: var(--font-body);">Scroll</span>
+      <div class="scroll-indicator w-5 h-8 rounded-full flex justify-center pt-1.5" style="border: 1px solid var(--color-border-strong);">
+        <div class="w-1 h-2 rounded-full" style="background: var(--color-accent);"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PROOF STATS STRIP
+       ================================================================ -->
+  <div class="proof-stats-strip hidden md:flex items-center justify-center gap-10 py-5 text-xs tracking-[0.1em] uppercase" style="color: var(--color-muted); font-family: var(--font-body); border-bottom: 1px solid var(--color-border);">
+    <span>Avg. load speed: 1.4s</span>
+    <span style="color: var(--color-accent);" aria-hidden="true">&#9670;</span>
+    <span>65% more bookings after launch</span>
+    <span style="color: var(--color-accent);" aria-hidden="true">&#9670;</span>
+    <span>Custom projects from $1,500</span>
+  </div>
+
+  <!-- ================================================================
+       MARQUEE DIVIDER
+       ================================================================ -->
+  <div class="overflow-hidden py-6" style="border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);" aria-hidden="true">
+    <div class="marquee-container flex" style="width: max-content;">
+      <div class="marquee-track flex items-center gap-12 whitespace-nowrap pr-12">
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Web Design</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Search Strategy</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Operational Efficiency</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">24/7 Concierge</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Email Systems</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Chatbots</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Web Design</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Search Strategy</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Operational Efficiency</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">24/7 Concierge</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Email Systems</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Chatbots</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+      </div>
+      <div class="marquee-track flex items-center gap-12 whitespace-nowrap pr-12" aria-hidden="true">
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Web Design</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Search Strategy</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Operational Efficiency</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">24/7 Concierge</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Email Systems</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Chatbots</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Web Design</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Search Strategy</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Operational Efficiency</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">24/7 Concierge</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Email Systems</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+        <span class="text-sm tracking-[0.2em] uppercase" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">Chatbots</span>
+        <span style="color: var(--color-accent);">&#9670;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================
+       SERVICES (Sticky-Scroll)
+       ================================================================ -->
+  <section id="services" class="px-6 md:px-12 lg:px-20 py-24 md:py-32" aria-label="Services">
+    <div class="max-w-7xl mx-auto sticky-section">
+      <!-- Scroll progress bar -->
+      <div class="scroll-progress-track" aria-hidden="true">
+        <div class="scroll-progress-fill"></div>
+      </div>
+
+      <!-- Sticky heading -->
+      <div class="sticky-left reveal">
+        <p class="text-sm tracking-[0.2em] uppercase mb-4" style="color: var(--color-accent); font-family: var(--font-body); font-weight: 500;">What We Do</p>
+        <h2 style="font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;" class="text-3xl md:text-5xl lg:text-6xl">
+          Your business online.<br>
+          <span style="color: var(--color-muted);">Done right.</span>
+        </h2>
+      </div>
+
+      <!-- Scrolling cards -->
+      <div class="scroll-right">
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">01</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Website Design</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Custom-built, high-converting websites that make your business look as good as it actually is. No templates. No shortcuts.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">02</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Search Strategy</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Get found when it matters. We build a search presence that puts you in front of high-intent customers, the ones actively looking for what you offer.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">03</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Operational Efficiency</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Smart workflows, automated follow-ups, and systems that eliminate busywork. Spend less time chasing leads and more time closing them.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">04</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">24/7 Concierge</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">AI-powered tools that answer questions, book appointments, and follow up with leads around the clock so you never miss an opportunity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ================================================================
+       PROCESS (Sticky-Scroll)
+       ================================================================ -->
+  <section id="process" class="px-6 md:px-12 lg:px-20 py-24 md:py-32" aria-label="Our process">
+    <div class="max-w-7xl mx-auto sticky-section">
+      <div class="scroll-progress-track" aria-hidden="true">
+        <div class="scroll-progress-fill"></div>
+      </div>
+
+      <div class="sticky-left reveal">
+        <p class="text-sm tracking-[0.2em] uppercase mb-4" style="color: var(--color-accent); font-family: var(--font-body); font-weight: 500;">Our Process</p>
+        <h2 style="font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;" class="text-3xl md:text-5xl lg:text-6xl">
+          Two weeks.<br>
+          <span style="color: var(--color-muted);">One definitive digital presence.</span>
+        </h2>
+      </div>
+
+      <div class="scroll-right">
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">01</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Discovery</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">We ask the right questions. Your brand, your customers, your goals. We get it before we touch a single pixel.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">02</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Design</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Custom mockups built around your brand. You see it before we build it, and nothing moves forward until you're excited about it.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">03</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Build</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Fast, clean, responsive. Your site loads in under 2 seconds and looks perfect on every screen.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">04</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Launch</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">You go live with ongoing optimization and performance monitoring. We track what's working, refine what isn't, and make sure your site keeps delivering results month after month.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ================================================================
+       PORTFOLIO (Sticky-Scroll)
+       ================================================================ -->
+  <section id="work" class="px-6 md:px-12 lg:px-20 py-24 md:py-32" aria-label="Portfolio">
+    <div class="max-w-7xl mx-auto sticky-section">
+      <div class="scroll-progress-track" aria-hidden="true">
+        <div class="scroll-progress-fill"></div>
+      </div>
+
+      <div class="sticky-left reveal">
+        <p class="text-sm tracking-[0.2em] uppercase mb-4" style="color: var(--color-accent); font-family: var(--font-body); font-weight: 500;">Our Work</p>
+        <h2 style="font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;" class="text-3xl md:text-5xl lg:text-6xl">
+          Results that speak<br>
+          <span style="color: var(--color-muted);">louder than promises.</span>
+        </h2>
+      </div>
+
+      <div class="scroll-right">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="reveal">
+            <div class="portfolio-card aspect-[3/2] rounded-sm">
+              <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop"
+                   alt="The Copper Table — upscale restaurant interior"
+                   loading="lazy" width="800" height="600"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-info">
+              <span class="text-xs tracking-[0.15em] uppercase" style="color: var(--color-accent); font-family: var(--font-body);">Restaurant</span>
+              <h3 class="text-base font-700 mt-2" style="font-family: var(--font-display);">The Copper Table</h3>
+              <p class="text-xs mt-1" style="color: var(--color-muted);">Full website redesign &amp; online booking</p>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <div class="portfolio-card aspect-[3/2] rounded-sm">
+              <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=800&h=600&fit=crop"
+                   alt="Precision Cuts — modern barbershop interior"
+                   loading="lazy" width="800" height="600"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-info">
+              <span class="text-xs tracking-[0.15em] uppercase" style="color: var(--color-accent); font-family: var(--font-body);">Barbershop</span>
+              <h3 class="text-base font-700 mt-2" style="font-family: var(--font-display);">Precision Cuts</h3>
+              <p class="text-xs mt-1" style="color: var(--color-muted);">Brand identity &amp; custom website</p>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <div class="portfolio-card aspect-[3/2] rounded-sm">
+              <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&h=600&fit=crop"
+                   alt="Iron Republic — gym equipment and training floor"
+                   loading="lazy" width="800" height="600"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-info">
+              <span class="text-xs tracking-[0.15em] uppercase" style="color: var(--color-accent); font-family: var(--font-body);">Fitness</span>
+              <h3 class="text-base font-700 mt-2" style="font-family: var(--font-display);">Iron Republic</h3>
+              <p class="text-xs mt-1" style="color: var(--color-muted);">Website, SEO &amp; email automation</p>
+            </div>
+          </div>
+
+          <div class="reveal">
+            <div class="portfolio-card aspect-[3/2] rounded-sm">
+              <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&h=600&fit=crop"
+                   alt="Mejia Construction — active construction site"
+                   loading="lazy" width="800" height="600"
+                   class="w-full h-full object-cover">
+            </div>
+            <div class="portfolio-info">
+              <span class="text-xs tracking-[0.15em] uppercase" style="color: var(--color-accent); font-family: var(--font-body);">Construction</span>
+              <h3 class="text-base font-700 mt-2" style="font-family: var(--font-display);">Mejia Construction</h3>
+              <p class="text-xs mt-1" style="color: var(--color-muted);">Full website build &amp; lead generation</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ================================================================
+       ABOUT (Sticky-Scroll)
+       ================================================================ -->
+  <section id="about" class="px-6 md:px-12 lg:px-20 py-24 md:py-32" aria-label="About Apex Digital">
+    <div class="max-w-7xl mx-auto sticky-section">
+      <div class="scroll-progress-track" aria-hidden="true">
+        <div class="scroll-progress-fill"></div>
+      </div>
+
+      <div class="sticky-left reveal">
+        <p class="text-sm tracking-[0.2em] uppercase mb-4" style="color: var(--color-accent); font-family: var(--font-body); font-weight: 500;">About</p>
+        <h2 style="font-family: var(--font-display); font-weight: 800; letter-spacing: -0.02em;" class="text-3xl md:text-5xl lg:text-6xl">
+          Full Transparency.<br><span style="color: var(--color-muted);">Uncompromising Quality.</span>
+        </h2>
+        <div class="mt-10 pt-10" style="border-top: 1px solid var(--color-border);">
+          <p class="text-lg font-600" style="font-family: var(--font-display);">David Perez</p>
+          <p class="text-sm mt-1" style="color: var(--color-muted);">Founder &amp; Web Strategist</p>
+          <p class="text-xs mt-3 leading-relaxed" style="color: var(--color-muted);">Conversion-focused design for restaurants, trades, law firms, and local businesses.</p>
+        </div>
+      </div>
+
+      <div class="scroll-right">
+        <div class="reveal">
+          <p class="text-lg leading-relaxed mb-6" style="color: var(--color-muted);">
+            We believe in clarity over jargon and results over promises. Every project is built on honest communication, data-driven decisions, and a commitment to making your investment pay for itself.
+          </p>
+          <p class="text-lg leading-relaxed" style="color: var(--color-muted);">
+            No guesswork. No cutting corners. Just work we're proud to put our name on.
+          </p>
+        </div>
+
+        <blockquote class="pl-8 border-l-2 reveal" style="border-color: var(--color-accent);">
+          <p class="text-2xl md:text-3xl font-700 leading-snug" style="font-family: var(--font-display); letter-spacing: -0.01em;">
+            "Your website should work<br>as hard as you do."
+          </p>
+          <p class="mt-4 text-sm" style="color: var(--color-muted); font-family: var(--font-body);">David Perez, Founder &amp; Web Strategist</p>
+        </blockquote>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">01</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">The Highest Standards</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Every element placed with intent. We don't use templates, don't cut corners, and only deliver work we'd stake our reputation on.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">02</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Transparent Partnership</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">Clear communication about scope, timelines, and costs. No surprises, no hidden fees, no fine print. Trust starts with honesty.</p>
+        </div>
+
+        <div class="service-card reveal">
+          <span class="service-number block text-4xl font-800 mb-6 transition-colors duration-300" style="font-family: var(--font-display); color: var(--color-number);">03</span>
+          <h3 class="text-xl font-700 mb-4" style="font-family: var(--font-display);">Built to Perform</h3>
+          <p class="text-sm leading-relaxed" style="color: var(--color-muted);">A beautiful site that doesn't convert is just decoration. We build for results. More calls, more bookings, more revenue.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider max-w-7xl mx-auto"></div>
+
+  <!-- ================================================================
+       CONTACT
+       ================================================================ -->
+  <section id="contact" class="px-6 md:px-12 lg:px-20 py-24 md:py-32" aria-label="Contact us">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        <!-- Left: headline + contact info -->
+        <div class="reveal">
+          <p class="text-sm tracking-[0.2em] uppercase mb-6" style="color: var(--color-accent); font-family: var(--font-body); font-weight: 500;">Let's Talk</p>
+          <h2 style="font-family: var(--font-display); font-weight: 800; letter-spacing: -0.03em; line-height: 1;" class="text-4xl md:text-5xl lg:text-6xl mb-8">
+            Let's build<br><span style="color: var(--color-muted);">yours.</span>
+          </h2>
+          <p class="text-lg leading-relaxed mb-6" style="color: var(--color-muted);">
+            Tell us what you need. We'll send you a free custom mockup within 48 hours. No strings, no pressure.
+          </p>
+          <p class="text-sm font-500 mb-12" style="color: var(--color-accent); font-family: var(--font-display);">
+            If you don't love the mockup, you owe us nothing.
+          </p>
+
+          <div class="flex flex-col gap-6">
+            <div>
+              <p class="text-xs tracking-[0.15em] uppercase mb-2" style="color: var(--color-accent); font-family: var(--font-body);">Email</p>
+              <a href="mailto:david@apexdigital.com" class="contact-link text-lg no-underline transition-colors" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">david@apexdigital.com</a>
+            </div>
+            <div>
+              <p class="text-xs tracking-[0.15em] uppercase mb-2" style="color: var(--color-accent); font-family: var(--font-body);">Phone</p>
+              <a href="tel:6202555165" class="contact-link text-lg no-underline transition-colors" style="color: var(--color-muted); font-family: var(--font-display); font-weight: 500;">(620) 255-5165</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: contact form -->
+        <div class="reveal" style="transition-delay: 0.15s;">
+          <form id="contactForm" class="flex flex-col gap-5" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label for="name" class="block text-xs tracking-[0.1em] uppercase mb-3" style="color: var(--color-muted); font-family: var(--font-body);">Your Name</label>
+                <input id="name" type="text" name="name" placeholder="John Smith" class="contact-input" required autocomplete="name">
+              </div>
+              <div>
+                <label for="contact" class="block text-xs tracking-[0.1em] uppercase mb-3" style="color: var(--color-muted); font-family: var(--font-body);">Email or Phone</label>
+                <input id="contact" type="text" name="contact" placeholder="john@company.com" class="contact-input" required autocomplete="email">
+              </div>
+            </div>
+            <div>
+              <label for="business" class="block text-xs tracking-[0.1em] uppercase mb-3" style="color: var(--color-muted); font-family: var(--font-body);">Business Name</label>
+              <input id="business" type="text" name="business" placeholder="Your Business Name" class="contact-input" autocomplete="organization">
+            </div>
+            <div>
+              <label for="message" class="block text-xs tracking-[0.1em] uppercase mb-3" style="color: var(--color-muted); font-family: var(--font-body);">Tell Us About Your Project</label>
+              <textarea id="message" name="message" rows="5" placeholder="What are you looking for? A new website, search strategy, operational efficiency..." class="contact-input" style="resize: vertical; min-height: 120px;" required></textarea>
+            </div>
+            <div id="formStatus" class="form-status" role="alert" aria-live="polite"></div>
+            <button type="submit" class="btn-primary mt-2 w-full sm:w-auto sm:self-start">
+              Get My Free Custom Mockup
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       FOOTER
+       ================================================================ -->
+  <footer class="px-6 md:px-12 lg:px-20 py-12" style="border-top: 1px solid var(--color-border);" role="contentinfo">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-2">
+        <span class="footer-logo" style="font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; letter-spacing: -0.02em;">
+          APEX<span class="logo-dot" style="color: var(--color-accent);">.</span>DIGITAL
+        </span>
+      </div>
+      <p class="text-xs" style="color: var(--color-muted);">&copy; 2026 Apex Digital. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- App JS (ES modules) -->
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>

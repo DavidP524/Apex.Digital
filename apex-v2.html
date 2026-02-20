@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex Digital — Premium Web Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        accent: '#dc2626',
+                        bg: '#fafafa',
+                        dark: '#0a0a0a',
+                        txt: '#1a1a1a',
+                        muted: '#666666',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; overflow-x: hidden; background: #fafafa; color: #1a1a1a; }
+        html { scroll-behavior: smooth; }
+
+        /* ===== GRAIN OVERLAY ===== */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 128px 128px;
+        }
+
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: #dc2626;
+            z-index: 200;
+            width: 0%;
+        }
+
+        /* ===== EASING ===== */
+        :root {
+            --ease: cubic-bezier(0.65, 0.05, 0.36, 1);
+        }
+
+        /* ===== HERO BG ===== */
+        .hero-bg {
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(220, 38, 38, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(120, 40, 200, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 80%, rgba(220, 100, 38, 0.04) 0%, transparent 50%),
+                linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+            /* If hero-bg.jpg exists, add it via inline style on the element */
+        }
+
+        /* ===== NAV ===== */
+        nav {
+            transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease), border-color 0.4s var(--ease);
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            background: rgba(250, 250, 250, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom-color: rgba(0, 0, 0, 0.06);
+        }
+        .nav-link {
+            position: relative;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #1a1a1a;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s var(--ease);
+        }
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* ===== SCROLL REVEALS ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+        }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+        }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+        }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+        }
+        .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0s; }
+        .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.12s; }
+        .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.24s; }
+        .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.36s; }
+        .reveal-stagger.visible > * { opacity: 1; transform: translateY(0); }
+
+        /* ===== BUTTON HOVER (LeftClick style) ===== */
+        .btn-slide {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-slide .btn-text {
+            display: block;
+            transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+        }
+        .btn-slide .btn-text-hover {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            transition: transform 0.4s var(--ease), opacity 0.4s var(--ease);
+        }
+        .btn-slide:hover .btn-text {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        .btn-slide:hover .btn-text-hover {
+            transform: translateY(-100%);
+            opacity: 1;
+        }
+
+        /* ===== SECTION NUMBERS ===== */
+        .section-num {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            font-size: 120px;
+            font-weight: 900;
+            color: #1a1a1a;
+            opacity: 0.04;
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+            letter-spacing: -0.04em;
+        }
+
+        /* ===== CARD HOVER ===== */
+        .card-lift {
+            transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+        }
+        .card-lift:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        /* ===== DEVICE MOCKUPS ===== */
+        .device-browser {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+        }
+        .browser-bar {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #eee;
+        }
+        .browser-dot { width: 7px; height: 7px; border-radius: 50%; }
+        .browser-url {
+            flex: 1;
+            height: 18px;
+            background: #fff;
+            border-radius: 3px;
+            margin-left: 8px;
+            border: 1px solid #e5e5e5;
+        }
+
+        .device-laptop {
+            background: #222;
+            border-radius: 10px 10px 0 0;
+            padding: 6px 6px 0;
+        }
+        .device-laptop .screen { border-radius: 6px 6px 0 0; overflow: hidden; }
+        .laptop-base {
+            width: 108%;
+            margin-left: -4%;
+            height: 12px;
+            background: linear-gradient(to bottom, #333, #252525);
+            border-radius: 0 0 6px 6px;
+        }
+
+        .device-phone {
+            background: #222;
+            border-radius: 20px;
+            padding: 10px 5px;
+        }
+        .device-phone .screen { border-radius: 12px; overflow: hidden; }
+        .phone-notch {
+            width: 36px;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            margin: 0 auto 6px;
+        }
+
+        /* ===== 3D TILT ===== */
+        .tilt-card {
+            transition: transform 0.2s ease-out;
+        }
+
+        /* ===== SVG ICON DRAW ===== */
+        .icon-draw path, .icon-draw polyline, .icon-draw line, .icon-draw circle {
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            transition: stroke-dashoffset 1s var(--ease);
+        }
+        .icon-draw.drawn path, .icon-draw.drawn polyline, .icon-draw.drawn line, .icon-draw.drawn circle {
+            stroke-dashoffset: 0;
+        }
+
+        /* ===== UNDERLINE DRAW ===== */
+        .line-draw { position: relative; display: inline-block; }
+        .line-draw::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #dc2626;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.8s var(--ease);
+        }
+        .line-draw.drawn::after { transform: scaleX(1); }
+
+        /* ===== TIMELINE ===== */
+        .timeline-line {
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 1.2s var(--ease);
+        }
+        .timeline-line.drawn { transform: scaleX(1); }
+        .timeline-dot {
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .timeline-dot.drawn { transform: scale(1); }
+        .timeline-dot:nth-child(2) { transition-delay: 0.3s; }
+        .timeline-dot:nth-child(4) { transition-delay: 0.6s; }
+        .timeline-dot:nth-child(6) { transition-delay: 0.9s; }
+
+        /* ===== MARQUEE ===== */
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-track { animation: marquee 30s linear infinite; }
+        .marquee-wrap:hover .marquee-track { animation-play-state: paused; }
+
+        /* ===== SCROLL INDICATOR ===== */
+        @keyframes bounce-subtle {
+            0%, 100% { transform: translateY(0); opacity: 0.4; }
+            50% { transform: translateY(6px); opacity: 0.7; }
+        }
+        .scroll-indicator { animation: bounce-subtle 2.5s ease-in-out infinite; }
+
+        /* ===== INPUT FOCUS ===== */
+        .input-wrap { position: relative; }
+        .input-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: #dc2626;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease);
+        }
+        .input-wrap:focus-within::after { transform: scaleX(1); }
+
+        /* ===== IMAGE CLIP REVEAL ===== */
+        .clip-reveal {
+            clip-path: inset(0 100% 0 0);
+            transition: clip-path 0.8s var(--ease);
+        }
+        .clip-reveal.visible { clip-path: inset(0 0 0 0); }
+
+        /* ===== STAT COUNTER ===== */
+        @keyframes pulse-dot {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.3); }
+            50% { box-shadow: 0 0 0 6px rgba(220,38,38,0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="fixed top-0 w-full z-50">
+        <div class="flex items-center justify-between px-6 md:px-10 py-5 max-w-[1200px] mx-auto">
+            <a href="#" class="flex items-center gap-2.5">
+                <div class="w-8 h-8 bg-[#1a1a1a] rounded-full flex items-center justify-center">
+                    <span class="text-white text-[10px] font-extrabold tracking-tight">AD</span>
+                </div>
+                <span class="font-bold text-[15px] tracking-tight text-white nav-brand">Apex Digital</span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#services" class="nav-link text-[14px] text-white/60 font-medium hover:text-white transition-colors">Services</a>
+                <a href="#work" class="nav-link text-[14px] text-white/60 font-medium hover:text-white transition-colors">Work</a>
+                <a href="#pricing" class="nav-link text-[14px] text-white/60 font-medium hover:text-white transition-colors">Pricing</a>
+            </div>
+            <a href="#contact" class="btn-slide bg-[#dc2626] text-white text-[13px] font-medium px-6 py-2.5 rounded-full hover:bg-[#b91c1c]">
+                <span class="btn-text">Get Started</span>
+                <span class="btn-text-hover">Let's Talk &rarr;</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- ============ HERO ============ -->
+    <section class="hero-bg min-h-screen flex flex-col items-center justify-center text-center px-6 md:px-8 relative" id="hero">
+        <div class="relative z-10 max-w-[800px]">
+            <h1 class="text-white font-extrabold tracking-[-0.04em] leading-[1.05]" style="font-size: clamp(44px, 7vw, 84px);">
+                We design websites<br>that <span class="text-[#dc2626]">move</span> people.
+            </h1>
+            <p class="text-[18px] text-white/50 max-w-[460px] mx-auto mt-6 leading-relaxed">
+                Custom websites for small businesses. Built to convert. Delivered in weeks.
+            </p>
+            <a href="#contact" class="btn-slide inline-flex mt-10 bg-[#dc2626] text-white text-[15px] font-medium px-10 py-4 rounded-full hover:bg-[#b91c1c]">
+                <span class="btn-text">Get Started &rarr;</span>
+                <span class="btn-text-hover">Let's Build &rarr;</span>
+            </a>
+        </div>
+        <!-- Stats row -->
+        <div class="absolute bottom-20 left-0 right-0 flex items-center justify-center gap-8 md:gap-12 text-white/40 text-[13px]">
+            <span>100% Custom</span>
+            <span class="w-1 h-1 rounded-full bg-white/20"></span>
+            <span>&lt;4 Week Delivery</span>
+            <span class="w-1 h-1 rounded-full bg-white/20"></span>
+            <span>Starting at $1,000</span>
+        </div>
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 scroll-indicator">
+            <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+                <rect x="1" y="1" width="14" height="22" rx="7" stroke="white" stroke-opacity="0.3" stroke-width="1.5"/>
+                <circle cx="8" cy="8" r="2" fill="white" fill-opacity="0.4"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 01: SERVICES + PROCESS ============ -->
+    <section id="services" class="py-20 md:py-32 px-6 md:px-10 relative">
+        <div class="max-w-[1100px] mx-auto relative">
+            <div class="section-num">01</div>
+            <p class="text-[13px] uppercase tracking-[0.15em] text-[#999] mb-6 reveal">What we do</p>
+
+            <!-- Two column: headline left, services right -->
+            <div class="flex flex-col lg:flex-row gap-12 lg:gap-20 mb-20">
+                <!-- Left: Headline -->
+                <div class="lg:w-[40%] reveal-left">
+                    <h2 class="text-[32px] md:text-[42px] font-bold tracking-tight leading-[1.15]">
+                        Design.<br>Build.<br>Launch.<br><span class="text-[#dc2626]">Support.</span>
+                    </h2>
+                    <p class="text-[16px] text-[#666] mt-6 leading-relaxed max-w-[340px]">
+                        Everything your small business needs to win online — from first concept to ongoing care.
+                    </p>
+                </div>
+
+                <!-- Right: Services stack -->
+                <div class="lg:w-[60%] reveal-stagger" id="servicesGrid">
+                    <!-- Service 1 -->
+                    <div class="flex gap-5 pb-8 mb-8 border-b border-[#eee]">
+                        <svg class="icon-draw w-8 h-8 flex-shrink-0 mt-1" viewBox="0 0 32 32" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 4L28 10L14 24H8V18L22 4Z"/>
+                            <line x1="8" y1="28" x2="24" y2="28"/>
+                        </svg>
+                        <div>
+                            <h3 class="text-[18px] font-bold tracking-tight mb-2 line-draw">Custom Design</h3>
+                            <p class="text-[15px] text-[#666] leading-relaxed">Every pixel placed with intent. We design from scratch to match your brand — no templates, no shortcuts.</p>
+                        </div>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="flex gap-5 pb-8 mb-8 border-b border-[#eee]">
+                        <svg class="icon-draw w-8 h-8 flex-shrink-0 mt-1" viewBox="0 0 32 32" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="10,10 4,16 10,22"/>
+                            <polyline points="22,10 28,16 22,22"/>
+                            <line x1="18" y1="6" x2="14" y2="26"/>
+                        </svg>
+                        <div>
+                            <h3 class="text-[18px] font-bold tracking-tight mb-2 line-draw">Development</h3>
+                            <p class="text-[15px] text-[#666] leading-relaxed">Clean, fast code that works on every device. No page builders, no bloated plugins — just solid, modern web development.</p>
+                        </div>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="flex gap-5">
+                        <svg class="icon-draw w-8 h-8 flex-shrink-0 mt-1" viewBox="0 0 32 32" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 3L27 8V16C27 22.5 22 27 16 29C10 27 5 22.5 5 16V8L16 3Z"/>
+                            <polyline points="11,16 14,19 21,12"/>
+                        </svg>
+                        <div>
+                            <h3 class="text-[18px] font-bold tracking-tight mb-2 line-draw">Ongoing Care</h3>
+                            <p class="text-[15px] text-[#666] leading-relaxed">Monthly updates, security monitoring, and performance tuning so you never worry about your site again.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Process Timeline -->
+            <div class="reveal">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-6">
+                    <div class="text-center md:text-left flex-1">
+                        <p class="text-[12px] text-[#dc2626] font-semibold uppercase tracking-widest mb-1">Week 1</p>
+                        <p class="text-[15px] font-semibold">Discovery</p>
+                    </div>
+                    <div class="text-center flex-1">
+                        <p class="text-[12px] text-[#dc2626] font-semibold uppercase tracking-widest mb-1">Weeks 2–3</p>
+                        <p class="text-[15px] font-semibold">Design & Build</p>
+                    </div>
+                    <div class="text-center md:text-right flex-1">
+                        <p class="text-[12px] text-[#dc2626] font-semibold uppercase tracking-widest mb-1">Week 4</p>
+                        <p class="text-[15px] font-semibold">Launch</p>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center" id="timeline">
+                    <div class="w-3 h-3 rounded-full bg-[#dc2626] timeline-dot" style="animation: pulse-dot 2s infinite;"></div>
+                    <div class="flex-1 h-[2px] bg-[#eee] relative">
+                        <div class="timeline-line absolute inset-0 bg-[#dc2626]" style="height: 2px;"></div>
+                    </div>
+                    <div class="w-3 h-3 rounded-full bg-[#dc2626] timeline-dot"></div>
+                    <div class="flex-1 h-[2px] bg-[#eee] relative">
+                        <div class="timeline-line absolute inset-0 bg-[#dc2626]" style="height: 2px;"></div>
+                    </div>
+                    <div class="w-3 h-3 rounded-full bg-[#dc2626] timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 02: PORTFOLIO ============ -->
+    <section id="work" class="py-20 md:py-32 px-6 md:px-10 relative">
+        <div class="max-w-[1100px] mx-auto relative">
+            <div class="section-num">02</div>
+            <p class="text-[13px] uppercase tracking-[0.15em] text-[#999] mb-12 reveal">Selected work</p>
+
+            <!-- Asymmetric top row -->
+            <div class="flex flex-col md:flex-row gap-6 mb-6">
+                <!-- Large project ~63% -->
+                <div class="md:w-[63%] tilt-card reveal-left">
+                    <div class="device-browser card-lift">
+                        <div class="browser-bar">
+                            <div class="browser-dot" style="background:#ff5f57"></div>
+                            <div class="browser-dot" style="background:#ffbd2e"></div>
+                            <div class="browser-dot" style="background:#28c840"></div>
+                            <div class="browser-url"></div>
+                        </div>
+                        <img src="https://placehold.co/700x460/1a1a1a/444444?text=The+Local+Kitchen%0ARestaurant+Website" alt="Restaurant website" class="w-full block">
+                    </div>
+                    <div class="flex items-center justify-between mt-4">
+                        <div>
+                            <span class="text-[17px] font-bold">The Local Kitchen</span>
+                            <span class="text-[13px] text-[#999] ml-2">Restaurant &middot; 3 weeks</span>
+                        </div>
+                        <a href="#" class="text-[13px] text-[#dc2626] font-medium hover:underline">View &rarr;</a>
+                    </div>
+                </div>
+                <!-- Smaller project ~37% -->
+                <div class="md:w-[37%] tilt-card reveal-right">
+                    <div class="device-browser card-lift">
+                        <div class="browser-bar">
+                            <div class="browser-dot" style="background:#ff5f57"></div>
+                            <div class="browser-dot" style="background:#ffbd2e"></div>
+                            <div class="browser-dot" style="background:#28c840"></div>
+                            <div class="browser-url"></div>
+                        </div>
+                        <img src="https://placehold.co/420x460/f0f0f0/888888?text=Classic+Cuts%0ABarbershop" alt="Barber shop website" class="w-full block">
+                    </div>
+                    <div class="mt-4">
+                        <span class="text-[17px] font-bold">Classic Cuts</span>
+                        <span class="text-[13px] text-[#999] ml-2">Barbershop &middot; 2 weeks</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full-width laptop + phone -->
+            <div class="flex flex-col lg:flex-row items-center gap-8 mt-8 reveal-scale">
+                <div class="flex-1">
+                    <div class="device-laptop card-lift">
+                        <div class="screen">
+                            <img src="https://placehold.co/960x560/111111/333333?text=Parker+%26+Associates%0ALaw+Firm+Website" alt="Law firm website" class="w-full block">
+                        </div>
+                    </div>
+                    <div class="laptop-base"></div>
+                </div>
+                <div class="w-[120px] md:w-[150px] flex-shrink-0" style="transform: rotate(2deg);">
+                    <div class="device-phone card-lift">
+                        <div class="phone-notch"></div>
+                        <div class="screen">
+                            <img src="https://placehold.co/300x540/111111/333333?text=Mobile%0AView" alt="Mobile view" class="w-full block">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-between mt-4 reveal">
+                <div>
+                    <span class="text-[17px] font-bold">Parker & Associates</span>
+                    <span class="text-[13px] text-[#999] ml-2">Law Firm &middot; 3 weeks</span>
+                </div>
+                <a href="#" class="text-[13px] text-[#dc2626] font-medium hover:underline">View &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ MARQUEE ============ -->
+    <div class="bg-[#0a0a0a] border-y border-[#1a1a1a] py-5 overflow-hidden marquee-wrap">
+        <div class="flex whitespace-nowrap marquee-track items-center" style="width: max-content;">
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Custom Design</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">No Templates</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Built to Convert</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Mobile-First</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Under 4 Weeks</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Small Business</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <!-- Duplicate -->
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Custom Design</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">No Templates</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Built to Convert</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Mobile-First</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Under 4 Weeks</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+            <span class="text-[22px] md:text-[26px] font-medium text-white/50 tracking-tight mx-8">Small Business</span>
+            <span class="text-[#dc2626] mx-3 text-[8px]">&bull;</span>
+        </div>
+    </div>
+
+    <!-- ============ SECTION 03: RESULTS ============ -->
+    <section class="py-20 md:py-32 px-6 md:px-10 relative">
+        <div class="max-w-[1100px] mx-auto relative">
+            <div class="section-num">03</div>
+            <p class="text-[13px] uppercase tracking-[0.15em] text-[#999] mb-12 reveal">Results</p>
+
+            <div class="flex flex-col lg:flex-row gap-12 lg:gap-20">
+                <!-- Left: Testimonial -->
+                <div class="lg:w-[60%] reveal-left">
+                    <div class="text-[16px] text-[#dc2626] mb-6 tracking-wider">&starf;&starf;&starf;&starf;&starf;</div>
+                    <p class="text-[24px] md:text-[30px] font-medium leading-[1.4] tracking-tight mb-8">
+                        "Apex Digital built us a website that actually brings in customers. Best investment we've made for our business this year."
+                    </p>
+                    <div>
+                        <p class="text-[15px] font-bold">Sarah Johnson</p>
+                        <p class="text-[13px] text-[#999]">Owner, The Local Kitchen</p>
+                    </div>
+                </div>
+                <!-- Right: Stats -->
+                <div class="lg:w-[40%] flex flex-col justify-center gap-8 reveal-right">
+                    <div class="pb-6 border-b border-[#eee]">
+                        <p class="text-[40px] font-extrabold tracking-tight"><span class="counter" data-target="100">0</span>%</p>
+                        <p class="text-[14px] text-[#999]">Custom designed — zero templates</p>
+                    </div>
+                    <div class="pb-6 border-b border-[#eee]">
+                        <p class="text-[40px] font-extrabold tracking-tight">&lt;<span class="counter" data-target="4">0</span> Weeks</p>
+                        <p class="text-[14px] text-[#999]">From concept to live website</p>
+                    </div>
+                    <div>
+                        <p class="text-[40px] font-extrabold tracking-tight"><span class="counter" data-target="24">0</span>hr</p>
+                        <p class="text-[14px] text-[#999]">Average response time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ SECTION 04: PRICING ============ -->
+    <section id="pricing" class="py-20 md:py-32 px-6 md:px-10 relative">
+        <div class="max-w-[1100px] mx-auto relative">
+            <div class="section-num">04</div>
+            <p class="text-[13px] uppercase tracking-[0.15em] text-[#999] mb-12 reveal">Pricing</p>
+
+            <div class="max-w-[520px] mx-auto reveal-scale">
+                <div class="bg-white rounded-2xl border border-[#eee] p-8 md:p-10 card-lift">
+                    <p class="text-[13px] text-[#999] uppercase tracking-widest mb-6">One clear price</p>
+                    <p class="text-[48px] md:text-[56px] font-extrabold tracking-tight">
+                        $<span class="counter" data-target="1000">0</span><span class="counter-plus" style="opacity:0; transition: opacity 0.5s;">+</span>
+                    </p>
+                    <p class="text-[16px] text-[#999] mt-1 mb-6">per website</p>
+
+                    <div class="border-t border-[#eee] pt-6 mb-6">
+                        <p class="text-[15px] text-[#666] mb-4">+ $50–$150/mo for ongoing maintenance & support</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[12px] text-[#999] bg-[#f5f5f5] px-3 py-1.5 rounded-full">Custom design</span>
+                            <span class="text-[12px] text-[#999] bg-[#f5f5f5] px-3 py-1.5 rounded-full">Mobile-first</span>
+                            <span class="text-[12px] text-[#999] bg-[#f5f5f5] px-3 py-1.5 rounded-full">Under 4 weeks</span>
+                            <span class="text-[12px] text-[#999] bg-[#f5f5f5] px-3 py-1.5 rounded-full">Conversion-focused</span>
+                            <span class="text-[12px] text-[#999] bg-[#f5f5f5] px-3 py-1.5 rounded-full">Ongoing support</span>
+                        </div>
+                    </div>
+
+                    <a href="#contact" class="btn-slide block w-full bg-[#dc2626] text-white text-center text-[15px] font-medium py-4 rounded-full hover:bg-[#b91c1c]">
+                        <span class="btn-text">Get Started &rarr;</span>
+                        <span class="btn-text-hover">Let's Talk &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="py-20 md:py-32 px-6 md:px-10">
+        <div class="max-w-[600px] mx-auto">
+            <h2 class="text-[32px] md:text-[48px] font-bold tracking-tight text-center mb-12 reveal">
+                Ready to stand out?
+            </h2>
+            <form class="reveal" onsubmit="return false;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="input-wrap">
+                        <label class="text-[11px] uppercase tracking-[0.1em] text-[#999] block mb-2">Name</label>
+                        <input type="text" placeholder="John Smith" class="w-full border-b border-[#ddd] py-3 text-[15px] bg-transparent outline-none placeholder-[#ccc]">
+                    </div>
+                    <div class="input-wrap">
+                        <label class="text-[11px] uppercase tracking-[0.1em] text-[#999] block mb-2">Email</label>
+                        <input type="email" placeholder="john@example.com" class="w-full border-b border-[#ddd] py-3 text-[15px] bg-transparent outline-none placeholder-[#ccc]">
+                    </div>
+                </div>
+                <div class="mb-6 input-wrap">
+                    <label class="text-[11px] uppercase tracking-[0.1em] text-[#999] block mb-2">Business</label>
+                    <input type="text" placeholder="Your Business" class="w-full border-b border-[#ddd] py-3 text-[15px] bg-transparent outline-none placeholder-[#ccc]">
+                </div>
+                <div class="mb-8 input-wrap">
+                    <label class="text-[11px] uppercase tracking-[0.1em] text-[#999] block mb-2">Message</label>
+                    <textarea rows="3" placeholder="Tell us about your project..." class="w-full border-b border-[#ddd] py-3 text-[15px] bg-transparent outline-none resize-none placeholder-[#ccc]"></textarea>
+                </div>
+                <div class="text-right">
+                    <button type="submit" class="btn-slide bg-[#dc2626] text-white text-[15px] font-medium px-10 py-4 rounded-full hover:bg-[#b91c1c]">
+                        <span class="btn-text">Send Message &rarr;</span>
+                        <span class="btn-text-hover">Let's Go &rarr;</span>
+                    </button>
+                </div>
+            </form>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-6 mt-10 text-[13px] text-[#999] reveal">
+                <span>hello@apexdigital.com</span>
+                <span class="hidden md:inline text-[#ddd]">&middot;</span>
+                <span>Response within 24 hours</span>
+                <span class="hidden md:inline text-[#ddd]">&middot;</span>
+                <span>Remote — Anywhere</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="bg-[#0a0a0a] text-white py-10 md:py-14 px-6 md:px-10">
+        <div class="max-w-[1200px] mx-auto">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <a href="#" class="flex items-center gap-2.5">
+                    <div class="w-7 h-7 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-[#0a0a0a] text-[9px] font-extrabold tracking-tight">AD</span>
+                    </div>
+                    <span class="font-bold text-[14px] tracking-tight">Apex Digital</span>
+                </a>
+                <div class="flex items-center gap-6">
+                    <a href="#services" class="text-[13px] text-white/40 hover:text-white transition-colors">Services</a>
+                    <a href="#work" class="text-[13px] text-white/40 hover:text-white transition-colors">Work</a>
+                    <a href="#pricing" class="text-[13px] text-white/40 hover:text-white transition-colors">Pricing</a>
+                    <a href="#contact" class="text-[13px] text-white/40 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+            <div class="border-t border-white/10 mt-8 pt-6">
+                <p class="text-[12px] text-white/30 text-center">&copy; 2026 Apex Digital. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+        // ===== SCROLL REVEALS =====
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right, .reveal-stagger, .clip-reveal').forEach(el => revealObs.observe(el));
+
+        // ===== ICON + UNDERLINE DRAW =====
+        const drawObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.icon-draw').forEach(i => i.classList.add('drawn'));
+                    e.target.querySelectorAll('.line-draw').forEach(l => l.classList.add('drawn'));
+                }
+            });
+        }, { threshold: 0.2 });
+        const sg = document.getElementById('servicesGrid');
+        if (sg) drawObs.observe(sg);
+
+        // ===== TIMELINE =====
+        const tlObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.querySelectorAll('.timeline-line').forEach(l => l.classList.add('drawn'));
+                    e.target.querySelectorAll('.timeline-dot').forEach(d => d.classList.add('drawn'));
+                }
+            });
+        }, { threshold: 0.5 });
+        const tl = document.getElementById('timeline');
+        if (tl) tlObs.observe(tl);
+
+        // ===== COUNTERS =====
+        function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+        const counterObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting && !e.target.dataset.done) {
+                    e.target.dataset.done = '1';
+                    const target = parseInt(e.target.dataset.target);
+                    if (target === 0) { e.target.textContent = '0'; return; }
+                    const start = performance.now();
+                    const dur = 1500;
+                    (function tick(now) {
+                        const p = Math.min((now - start) / dur, 1);
+                        e.target.textContent = Math.floor(easeOut(p) * target).toLocaleString();
+                        if (p < 1) requestAnimationFrame(tick);
+                        else {
+                            e.target.textContent = target.toLocaleString();
+                            const plus = e.target.nextElementSibling;
+                            if (plus && plus.classList.contains('counter-plus')) plus.style.opacity = '1';
+                        }
+                    })(performance.now());
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+        // ===== NAV SCROLL =====
+        const nav = document.querySelector('nav');
+        const brand = nav.querySelector('.nav-brand');
+        const navLinks = nav.querySelectorAll('.nav-link');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY > 50;
+            nav.classList.toggle('scrolled', scrolled);
+            // Switch nav colors when on light background
+            brand.style.color = scrolled ? '#1a1a1a' : '#fff';
+            navLinks.forEach(l => {
+                l.style.color = scrolled ? '#666' : 'rgba(255,255,255,0.6)';
+            });
+            // Update nav link underline color
+            const style = scrolled ? '#1a1a1a' : '#fff';
+            navLinks.forEach(l => l.style.setProperty('--ul-color', style));
+        });
+
+        // ===== SCROLL PROGRESS =====
+        const prog = document.getElementById('scrollProgress');
+        window.addEventListener('scroll', () => {
+            const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            prog.style.width = pct + '%';
+        });
+
+        // ===== 3D TILT =====
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const r = card.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                card.style.transform = `perspective(800px) rotateX(${y * -6}deg) rotateY(${x * 6}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(800px) rotateX(0) rotateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>
