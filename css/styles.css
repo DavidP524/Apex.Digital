@@ -114,7 +114,6 @@ html.dark ::-webkit-scrollbar-thumb { background: #444; }
   background: #FAFAFA;
   border-bottom: 1px solid var(--color-border);
   transition: background 0.3s ease;
-  padding-top: calc(env(safe-area-inset-top) + 1.25rem);
 }
 html.dark .site-nav {
   background: #0F0F0F;
