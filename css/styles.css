@@ -110,6 +110,18 @@ html.dark ::-webkit-scrollbar-thumb { background: #444; }
 .stagger-children .reveal:nth-child(4) { transition-delay: 0.3s; }
 
 /* ---------- Navigation ---------- */
+/* Solid bar behind the iPhone status bar / Dynamic Island area */
+.site-nav::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  background: var(--color-bg);
+  z-index: 1;
+}
+
 .site-nav {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
