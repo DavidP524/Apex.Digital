@@ -8,6 +8,7 @@ export function initNav() {
   const menuClose = document.getElementById('menuClose');
   const siteNav = document.querySelector('.site-nav');
   const logoLink = document.getElementById('logoLink');
+  const scrollContainer = document.getElementById('scrollContainer');
 
   // --- Mobile menu ---
   if (menuToggle && mobileMenu && menuClose) {
@@ -17,14 +18,14 @@ export function initNav() {
     function openMenu() {
       mobileMenu.setAttribute('aria-hidden', 'false');
       menuToggle.setAttribute('aria-expanded', 'true');
-      document.body.style.overflow = 'hidden';
+      if (scrollContainer) scrollContainer.style.overflow = 'hidden';
       setTimeout(() => menuClose.focus(), 300);
     }
 
     function closeMenu() {
       mobileMenu.setAttribute('aria-hidden', 'true');
       menuToggle.setAttribute('aria-expanded', 'false');
-      document.body.style.overflow = '';
+      if (scrollContainer) scrollContainer.style.overflow = '';
       menuToggle.focus();
     }
 
@@ -64,7 +65,7 @@ export function initNav() {
   if (logoLink) {
     logoLink.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      (scrollContainer || window).scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
@@ -72,7 +73,8 @@ export function initNav() {
   if (siteNav) {
     let ticking = false;
     function updateNav() {
-      if (window.scrollY > 100) {
+      const scrollTop = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
+      if (scrollTop > 100) {
         siteNav.classList.add('scrolled');
       } else {
         siteNav.classList.remove('scrolled');
@@ -80,7 +82,7 @@ export function initNav() {
       ticking = false;
     }
 
-    window.addEventListener('scroll', () => {
+    (scrollContainer || window).addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(updateNav);
         ticking = true;
@@ -107,6 +109,7 @@ export function initNav() {
         }
       });
     }, {
+      root: scrollContainer || null,
       rootMargin: '-20% 0px -60% 0px',
       threshold: 0
     });

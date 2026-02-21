@@ -5,6 +5,8 @@ export function initScrollReveal() {
   const reveals = document.querySelectorAll('.reveal');
   if (reveals.length === 0) return;
 
+  const scrollContainer = document.getElementById('scrollContainer');
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach(entry => {
@@ -14,7 +16,7 @@ export function initScrollReveal() {
         }
       });
     },
-    { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    { root: scrollContainer || null, threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
   );
 
   reveals.forEach(el => observer.observe(el));
