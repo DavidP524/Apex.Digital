@@ -45,7 +45,10 @@ html.dark {
 
 /* ---------- Reset ---------- */
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-bg);
+}
 body {
   font-family: var(--font-body);
   background-color: var(--color-bg);
@@ -109,36 +112,11 @@ html.dark ::-webkit-scrollbar-thumb { background: #444; }
 .stagger-children .reveal:nth-child(3) { transition-delay: 0.2s; }
 .stagger-children .reveal:nth-child(4) { transition-delay: 0.3s; }
 
-/* ---------- iPhone Status Bar Cover ---------- */
-/* Covers the transparent iOS Safari status bar area.
-   Only visible on mobile via media query so it doesn't affect desktop. */
-@supports (padding: env(safe-area-inset-top)) {
-  @media screen and (max-width: 1024px) {
-    .statusbar-cover {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 60px;
-      background-color: var(--color-bg);
-      z-index: 9998;
-      pointer-events: none;
-    }
-  }
-}
-
 /* ---------- Navigation ---------- */
 .site-nav {
   background: #FAFAFA;
   border-bottom: 1px solid var(--color-border);
   transition: background 0.3s ease;
-}
-@supports (padding: env(safe-area-inset-top)) {
-  @media screen and (max-width: 1024px) {
-    .site-nav {
-      padding-top: 80px;
-    }
-  }
 }
 html.dark .site-nav {
   background: #0F0F0F;
