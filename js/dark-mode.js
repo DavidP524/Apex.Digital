@@ -15,6 +15,11 @@ export function initDarkMode() {
     } else {
       root.classList.remove('dark');
     }
+    // Update status bar color on iOS Safari
+    const themeColorMeta = document.getElementById('themeColorMeta');
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', dark ? '#0F0F0F' : '#FAFAFA');
+    }
     updateIcons(dark);
   }
 
@@ -32,9 +37,9 @@ export function initDarkMode() {
   }
 
   function handleToggle() {
-    const isDark = root.classList.toggle('dark');
+    const isDark = !root.classList.contains('dark');
     localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
-    updateIcons(isDark);
+    setTheme(isDark);
   }
 
   // Determine initial theme
